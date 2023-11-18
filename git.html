@@ -47,15 +47,6 @@
       font-family: 'Poppins', Arial, sans-serif; /* Use Poppins for the h1 element */
     }
 
-    #mode-switch {
-      display: flex;
-      align-items: center;
-    }
-
-    #mode-label {
-      margin-right: 8px;
-    }
-
     #repos {
       display: flex;
       flex-wrap: wrap;
@@ -78,49 +69,63 @@
       transform: scale(1.05);
     }
 
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 40px;
-      height: 24px;
-    }
-
-    .switch input {
-      opacity: 0;
+    /* Sidebar Styles */
+    .sidebar {
+      height: 100%;
       width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
+      position: fixed;
+      z-index: 1;
       top: 0;
-      left: 0;
       right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: 0.4s;
-      border-radius: 24px;
+      background-color: #333;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
-    .slider:before {
+    .sidebar a {
+      padding: 16px 8px 16px 32px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #fff;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      color: #2196F3;
+    }
+
+    .sidebar .close-btn {
       position: absolute;
-      content: "";
-      height: 16px;
-      width: 16px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: 0.4s;
-      border-radius: 50%;
+      top: 0;
+      left: 10px;
+      font-size: 30px;
+      margin-right: 50px;
+      margin-top: 15px;
+      cursor: pointer;
     }
 
-    input:checked + .slider {
-      background-color: #2196F3;
+    .content {
+      transition: margin-right 0.5s;
     }
 
-    input:checked + .slider:before {
-      transform: translateX(16px);
+    /* Enhanced Button Styles */
+    #open-sidebar {
+      font-size: 24px;
+      cursor: pointer;
+      padding: 8px;
+      color: #fff;
+      background-color: #333;
+      border: none;
+      border-radius: 4px;
+      margin-right: 10px;
+      transition: background-color 0.3s;
+    }
+
+    #open-sidebar:hover {
+      background-color: #555;
     }
   </style>
 </head>
@@ -130,16 +135,22 @@
       <img id="profile-picture" src="" alt="Profile Picture">
       <h1>BarneyCompiler</h1>
     </div>
-    <div id="mode-switch">
-      <span id="mode-label">Dark Mode:</span>
-      <label class="switch">
-        <input type="checkbox" id="mode-toggle" onclick="toggleDarkMode()" checked>
-        <span class="slider"></span>
-      </label>
-    </div>
+    <!-- Add the enhanced button to open the sidebar -->
+    <button id="open-sidebar" onclick="openSidebar()">☰</button>
   </header>
 
-  <div id="repos"></div>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <span class="close-btn" onclick="closeSidebar()">&times;</span>
+    <a href="https://www.youtube.com/@barneythegodd" target="_blank">YouTube</a>
+    <a href="https://discord.gg/THqGCCYzNE" target="_blank">Discord</a>
+    <a href="https://namemc.com/profile/BarneyTheGod.2" target="_blank">NameMC</a>
+  </div>
+
+  <!-- Page Content -->
+  <div class="content" id="repos">
+    <!-- Add your repositories content here -->
+  </div>
 
   <script>
     const username = "BarneyCompiler";
@@ -191,6 +202,16 @@
     function toggleDarkMode() {
       const body = document.body;
       body.classList.toggle("dark-mode");
+    }
+
+    function openSidebar() {
+      document.getElementById("sidebar").style.width = "250px";
+      document.getElementById("repos").style.marginRight = "250px";
+    }
+
+    function closeSidebar() {
+      document.getElementById("sidebar").style.width = "0";
+      document.getElementById("repos").style.marginRight = "0";
     }
 
     fetchUserData();
