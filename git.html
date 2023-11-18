@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BarneyCompiler - Github</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      transition: background-color 0.5s, color 0.5s;
+    }
+
+    body.dark-mode {
+      background-color: #121212;
+      color: #fff;
+    }
+
+    header {
+      background-color: #333;
+      padding: 1rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #profile-info {
+      display: flex;
+      align-items: center;
+    }
+
+    #profile-picture {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      color: #fff; /* Set text color explicitly */
+    }
+
+    #mode-switch {
+      display: flex;
+      align-items: center;
+    }
+
+    #mode-label {
+      margin-right: 8px;
+    }
+
+    #repos {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 2rem;
+    }
+
+    .repo-card {
+      width: 300px;
+      background-color: #333;
+      color: #fff;
+      padding: 1rem;
+      margin: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .repo-card:hover {
+      transform: scale(1.05);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(16px);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div id="profile-info">
+      <img id="profile-picture" src="" alt="Profile Picture">
+      <h1>BarneyCompiler</h1>
+    </div>
+    <div id="mode-switch">
+      <span id="mode-label">Dark Mode</span>
+      <label class="switch">
+        <input type="checkbox" id="mode-toggle" onclick="toggleDarkMode()">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </header>
+
+  <div id="repos"></div>
+
+  <script>
+    const username = "BarneyCompiler";
+    const apiUrl = `https://api.github.com/users/${username}`;
+    const reposUrl = `https://api.github.com/users/${username}/repos`;
+
+    async function fetchUserData() {
+      try {
+        const response = await fetch(apiUrl);
+        const userData = await response.json();
+        displayProfileInfo(userData.avatar_url);
+      } catch (error) {
+        console.error("Error fetching GitHub user data:", error);
+      }
+    }
+
+    async function fetchRepos() {
+      try {
+        const response = await fetch(reposUrl);
+        const repos = await response.json();
+        displayRepos(repos);
+      } catch (error) {
+        console.error("Error fetching GitHub repositories:", error);
+      }
+    }
+
+    function displayProfileInfo(avatarUrl) {
+      const profilePicture = document.getElementById("profile-picture");
+      profilePicture.src = avatarUrl;
+    }
+
+    function displayRepos(repos) {
+      const reposContainer = document.getElementById("repos");
+
+      repos.forEach(repo => {
+        const repoCard = document.createElement("div");
+        repoCard.classList.add("repo-card");
+
+        repoCard.innerHTML = `
+          <h2>${repo.name}</h2>
+          <p>${repo.description || "No description available."}</p>
+          <a href="${repo.html_url}" target="_blank">View on GitHub</a>
+        `;
+
+        reposContainer.appendChild(repoCard);
+      });
+    }
+
+    function toggleDarkMode() {
+      const body = document.body;
+      body.classList.toggle("dark-mode");
+    }
+
+    fetchUserData();
+    fetchRepos();
+  </script>
+</body>
+</html>
