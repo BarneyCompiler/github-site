@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet"> 
-  <title>BarneyCompiler - Github</title>
+  <title>GitHub Repositories</title>
+  <!-- Add the link to the Google Fonts API for Poppins -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', Arial, sans-serif; /* Use Poppins as the default font */
       margin: 0;
       padding: 0;
       overflow-x: hidden;
@@ -44,7 +43,8 @@
 
     h1 {
       margin: 0;
-      color: #fff; /* Set text color explicitly */
+      color: #fff;
+      font-family: 'Poppins', Arial, sans-serif; /* Use Poppins for the h1 element */
     }
 
     #mode-switch {
@@ -128,10 +128,10 @@
   <header>
     <div id="profile-info">
       <img id="profile-picture" src="" alt="Profile Picture">
-      <h1>BarneyCompiler</h1>
+      <h1>My GitHub Repositories</h1>
     </div>
     <div id="mode-switch">
-      <span id="mode-label">Dark Mode</span>
+      <span id="mode-label">Dark Mode:</span>
       <label class="switch">
         <input type="checkbox" id="mode-toggle" onclick="toggleDarkMode()">
         <span class="slider"></span>
