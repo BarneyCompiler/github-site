@@ -4,26 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BarneyCompiler - GitHub</title>
-  <!-- Add the link to the Google Fonts API for Poppins -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <style>
-    body {
-      font-family: 'Poppins', Arial, sans-serif; /* Use Poppins as the default font */
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      transition: background-color 0.5s, color 0.5s;
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --background: #0f172a;
+      --surface: #1e293b;
+      --surface-hover: #334155;
+      --text: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --success: #22c55e;
+      --warning: #eab308;
+      --danger: #ef4444;
     }
 
-    body.dark-mode {
-      background-color: #121212;
-      color: #fff;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
     }
 
     header {
-      background-color: #333;
-      padding: 1rem;
-      text-align: center;
+      background-color: var(--surface);
+      padding: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -32,125 +54,274 @@
     #profile-info {
       display: flex;
       align-items: center;
+      gap: 1rem;
     }
 
     #profile-picture {
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      margin-right: 10px;
+      border: 2px solid var(--primary);
+      transition: transform 0.3s ease;
     }
 
-    h1 {
-      margin: 0;
-      color: #fff;
-      font-family: 'Poppins', Arial, sans-serif; /* Use Poppins for the h1 element */
+    #profile-picture:hover {
+      transform: scale(1.1);
+    }
+
+    .stats-container {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+    }
+
+    .stat-card {
+      background-color: var(--surface);
+      padding: 1.5rem;
+      border-radius: 12px;
+      flex: 1;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
     }
 
     #repos {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
       padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     .repo-card {
-      width: 300px;
-      background-color: #333;
-      color: #fff;
-      padding: 1rem;
-      margin: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      transition: transform 0.3s ease-in-out;
+      background-color: var(--surface);
+      padding: 1.5rem;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
     .repo-card:hover {
-      transform: scale(1.05);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      border-color: var(--primary);
     }
 
-    /* Sidebar Styles */
-    .sidebar {
-      height: 100%;
-      width: 0;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      right: 0;
-      background-color: #333;
-      overflow-x: hidden;
-      transition: 0.5s;
-      padding-top: 60px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    .repo-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .sidebar a {
-      padding: 16px 8px 16px 32px;
+    .repo-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .repo-visibility {
+      background-color: var(--primary);
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+    }
+
+    .repo-description {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      flex-grow: 1;
+    }
+
+    .repo-stats {
+      display: flex;
+      gap: 1rem;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .repo-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background-color: var(--primary);
+      color: white;
       text-decoration: none;
-      font-size: 18px;
-      color: #fff;
-      display: block;
-      transition: 0.3s;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
     }
 
-    .sidebar a:hover {
-      color: #2196F3;
+    .repo-link:hover {
+      background-color: var(--primary-hover);
     }
 
-    .sidebar .close-btn {
-      position: absolute;
+    .sidebar {
+      position: fixed;
       top: 0;
-      left: 10px;
-      font-size: 30px;
-      margin-right: 50px;
-      margin-top: 15px;
-      cursor: pointer;
+      right: -300px;
+      width: 300px;
+      height: 100vh;
+      background-color: var(--surface);
+      padding: 2rem;
+      transition: right 0.3s ease;
+      z-index: 20;
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .content {
-      transition: margin-right 0.5s;
+    .sidebar.open {
+      right: 0;
     }
 
-    /* Enhanced Button Styles */
-    #open-sidebar {
-      font-size: 24px;
-      cursor: pointer;
-      padding: 8px;
-      color: #fff;
-      background-color: #333;
+    .sidebar-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .sidebar-link:hover {
+      background-color: var(--surface-hover);
+    }
+
+    #open-sidebar, .close-btn {
+      background: none;
       border: none;
-      border-radius: 4px;
-      margin-right: 10px;
-      transition: background-color 0.3s;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: color 0.3s ease;
     }
 
-    #open-sidebar:hover {
-      background-color: #555;
+    #open-sidebar:hover, .close-btn:hover {
+      color: var(--primary);
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+      z-index: 15;
+    }
+
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .repo-card {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    @media (max-width: 768px) {
+      .stats-container {
+        flex-direction: column;
+      }
+
+      #repos {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
-<body class="dark-mode">
+<body>
   <header>
-    <div id="profile-info">
-      <img id="profile-picture" src="" alt="Profile Picture">
-      <h1>BarneyCompiler</h1>
+    <div class="header-content">
+      <div id="profile-info">
+        <img id="profile-picture" src="" alt="Profile Picture">
+        <h1>BarneyCompiler</h1>
+      </div>
+      <button id="open-sidebar" onclick="openSidebar()">☰</button>
     </div>
-    <!-- Add the enhanced button to open the sidebar -->
-    <button id="open-sidebar" onclick="openSidebar()">☰</button>
   </header>
 
-  <!-- Sidebar -->
-  <div class="sidebar" id="sidebar">
-    <span class="close-btn" onclick="closeSidebar()">&times;</span>
-    <a href="https://www.youtube.com/@barneythegodd" target="_blank">YouTube</a>
-    <a href="https://discord.gg/THqGCCYzNE" target="_blank">Discord</a>
-    <a href="https://namemc.com/profile/BarneyTheGod.2" target="_blank">NameMC</a>
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-number" id="repos-count">0</div>
+      <div class="stat-label">Repositories</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="stars-count">0</div>
+      <div class="stat-label">Total Stars</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="forks-count">0</div>
+      <div class="stat-label">Total Forks</div>
+    </div>
   </div>
 
-  <!-- Page Content -->
-  <div class="content" id="repos">
-    <!-- Add your repositories content here -->
+  <div id="repos"></div>
+
+  <div class="sidebar" id="sidebar">
+    <button class="close-btn" onclick="closeSidebar()">×</button>
+    <div class="sidebar-links">
+      <a href="https://www.youtube.com/@barneythegodd" target="_blank" class="sidebar-link">
+        <span>YouTube</span>
+      </a>
+      <a href="https://discord.gg/THqGCCYzNE" target="_blank" class="sidebar-link">
+        <span>Discord</span>
+      </a>
+      <a href="https://namemc.com/profile/BarneyTheGod.2" target="_blank" class="sidebar-link">
+        <span>NameMC</span>
+      </a>
+    </div>
   </div>
+
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
   <script>
     const username = "BarneyCompiler";
@@ -161,7 +332,7 @@
       try {
         const response = await fetch(apiUrl);
         const userData = await response.json();
-        displayProfileInfo(userData.avatar_url);
+        displayProfileInfo(userData);
       } catch (error) {
         console.error("Error fetching GitHub user data:", error);
       }
@@ -172,46 +343,60 @@
         const response = await fetch(reposUrl);
         const repos = await response.json();
         displayRepos(repos);
+        updateStats(repos);
       } catch (error) {
         console.error("Error fetching GitHub repositories:", error);
       }
     }
 
-    function displayProfileInfo(avatarUrl) {
+    function displayProfileInfo(userData) {
       const profilePicture = document.getElementById("profile-picture");
-      profilePicture.src = avatarUrl;
+      profilePicture.src = userData.avatar_url;
+    }
+
+    function updateStats(repos) {
+      document.getElementById("repos-count").textContent = repos.length;
+      const totalStars = repos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
+      const totalForks = repos.reduce((sum, repo) => sum + repo.forks_count, 0);
+      
+      document.getElementById("stars-count").textContent = totalStars;
+      document.getElementById("forks-count").textContent = totalForks;
     }
 
     function displayRepos(repos) {
       const reposContainer = document.getElementById("repos");
+      reposContainer.innerHTML = '';
 
-      repos.forEach(repo => {
+      repos.forEach((repo, index) => {
         const repoCard = document.createElement("div");
         repoCard.classList.add("repo-card");
+        repoCard.style.animationDelay = `${index * 0.1}s`;
 
         repoCard.innerHTML = `
-          <h2>${repo.name}</h2>
-          <p>${repo.description || "No description available."}</p>
-          <a href="${repo.html_url}" target="_blank">View on GitHub</a>
+          <div class="repo-header">
+            <h2 class="repo-name">${repo.name}</h2>
+            <span class="repo-visibility">${repo.private ? 'Private' : 'Public'}</span>
+          </div>
+          <p class="repo-description">${repo.description || "No description available."}</p>
+          <div class="repo-stats">
+            <span>⭐ ${repo.stargazers_count}</span>
+            <span>🍴 ${repo.forks_count}</span>
+          </div>
+          <a href="${repo.html_url}" target="_blank" class="repo-link">View on GitHub</a>
         `;
 
         reposContainer.appendChild(repoCard);
       });
     }
 
-    function toggleDarkMode() {
-      const body = document.body;
-      body.classList.toggle("dark-mode");
-    }
-
     function openSidebar() {
-      document.getElementById("sidebar").style.width = "250px";
-      document.getElementById("repos").style.marginRight = "250px";
+      document.getElementById("sidebar").classList.add("open");
+      document.getElementById("overlay").classList.add("active");
     }
 
     function closeSidebar() {
-      document.getElementById("sidebar").style.width = "0";
-      document.getElementById("repos").style.marginRight = "0";
+      document.getElementById("sidebar").classList.remove("open");
+      document.getElementById("overlay").classList.remove("active");
     }
 
     fetchUserData();
